@@ -1,0 +1,39 @@
+# Environment variables (zawiera hasła!)
+.env
+scripts/.env
+
+# System files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+.claude/
+*.sublime-project
+*.sublime-workspace
+
+# Generated files - ignore content but keep structure
+tmp/*.json
+ads/*.txt
+tasks/*.json
+
+# Temporary files
+*.tmp
+*.temp
+
+# Private folder (as per custom instructions)
+.private/
