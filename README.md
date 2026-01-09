@@ -241,6 +241,35 @@ flowchart TD
     style GENERATE fill:#fce4ec
 ```
 
+## n8n AI Agent
+
+The `n8n-agent/` directory contains an automated AI agent workflow for n8n that generates Google Ads from website content.
+
+### Features
+- **Automated workflow**: Chat interface for URL input, automatic ad generation
+- **AI-powered**: Uses Gemini 2.5 Flash via OpenRouter
+- **Copywriting frameworks**: 4U, PAS, BAB, FAB formulas built into the prompt
+- **Validation loop**: Automatically validates and fixes ads until they pass
+- **Silent mode**: Fixes validation errors without user interaction
+
+### Files
+```
+n8n-agent/
+├── system-prompt-interactive.md  # Full system prompt with copywriting frameworks
+├── n8n-agent-plan.md             # Architecture and implementation plan
+├── validate_google_ads.js        # Validation tool code
+├── check_text_length.js          # Length checker tool code
+└── n8n-workflows/                # Exportable n8n workflow JSON
+```
+
+### Tools Available to Agent
+- `scrape_website` - Fetches website content
+- `validate_google_ads` - Validates ads against Google requirements
+- `check_text_length` - Character count checker
+- `think` - Internal reasoning (no output)
+
+See [n8n-agent/n8n-agent-plan.md](n8n-agent/n8n-agent-plan.md) for full documentation.
+
 ### Google Ads Validation Rules
 
 | Check | Requirement |
