@@ -37,3 +37,6 @@ tasks/*.json
 
 # Private folder (as per custom instructions)
 .private/
+
+# Private plan (SaaS implementation)
+docs/SAAS_PLAN.md
