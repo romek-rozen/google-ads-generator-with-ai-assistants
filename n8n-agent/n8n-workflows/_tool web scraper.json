@@ -1,0 +1,557 @@
+{
+  "name": "_tool web scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "html": "={{ $json.data.trim() }}",
+        "options": {
+          "keepDataImages": true
+        }
+      },
+      "id": "eecf352a-cbcd-4914-b7ad-4c861301ad59",
+      "name": "Convert HTML to Markdown",
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "253c2b17-c749-4f0a-93e8-5ff74f1ce49b",
+              "name": "domain",
+              "value": "={{ $json.query }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "afe11b1b-fa8d-4282-a330-9951bd2882b4",
+      "name": "Set domain (text)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        32,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ed0f1505-82b6-4393-a0d8-088055137ec9",
+              "name": "domain",
+              "value": "={{ $json.domain.startsWith(\"http\") ? $json.domain : \"http://\" + $json.domain }}",
+              "type": "string"
+            },
+            {
+              "id": "310a7690-b77d-4a93-8f1f-d8fb92ef0624",
+              "name": "cacheKey",
+              "value": "=website:{{ $json.domain.extractDomain() + ($json.domain.extractUrlPath() !== \"/\" ? $json.domain.extractUrlPath() : \"\") }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "04af61d3-b78f-4b8f-bbc6-18d2ff4565c3",
+      "name": "Add protocool to domain (text)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        224,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Add protocool to domain (text)').item.json.domain }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "*/*"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1
+            }
+          }
+        }
+      },
+      "id": "58f4c01c-1583-414a-9b64-7de1ec0644c2",
+      "name": "Get website (text)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        784,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2b1c7ff8-06a7-448b-99b7-5ede4b2e0bf0",
+              "name": "response",
+              "value": "={{ $json.title_description }}\n\nCONTENT:\n{{ $json.data.replaceAll(/\\n{2,}/g, \"\\n\") }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "39787b34-1cb0-4b86-b9ae-7042988e24bb",
+      "name": "Set response (text)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [
+        1840,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.spider.cloud/crawl",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"limit\": 1,\n  \"request\": \"chrome\",\n  \"cache\": true,\n  \"viewport\": {\n    \"width\": 1280,\n    \"height\": 720,\n    \"device_scale_factor\": null,\n    \"emulating_mobile\": false,\n    \"is_landscape\": true,\n    \"has_touch\": false\n  },\n  \"url\": \"{{ $('Add protocool to domain (text)').item.json.domain }}\"\n} ",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        -128
+      ],
+      "id": "1e14ce4c-f2d2-44c9-9591-bf09df4dc85a",
+      "name": "spider.cloud",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "xvWtqxtATQO0nwOV",
+          "name": "spider cloud"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "query"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        240
+      ],
+      "id": "447952e1-aeed-4677-bf2d-c136a1d77864",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "data",
+        "key": "={{ $json.cacheKey }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        432,
+        240
+      ],
+      "id": "f30798c2-e7c2-4be6-8726-d4811e181745",
+      "name": "checkRedis",
+      "credentials": {
+        "redis": {
+          "id": "HKnRLpasgVqinMH4",
+          "name": "myLocalRedis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fcf5c326-0b04-45e7-a968-4810c179d311",
+              "leftValue": "={{ $json.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ebbf5af7-f2eb-4456-80cd-459d8faf4364",
+      "name": "ifRedisEmpty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        608,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $('Add protocool to domain (text)').item.json.cacheKey }}",
+        "value": "={{ $json.data }}",
+        "expire": true,
+        "ttl": 900
+      },
+      "id": "d0952c9e-e73a-4477-9cb2-b0267f029361",
+      "name": "saveToRedis",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        960,
+        112
+      ],
+      "credentials": {
+        "redis": {
+          "id": "HKnRLpasgVqinMH4",
+          "name": "myLocalRedis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "data",
+        "key": "={{ $('Add protocool to domain (text)').item.json.cacheKey }}",
+        "options": {}
+      },
+      "id": "e92ac252-47d4-4438-9cc9-695b1335065c",
+      "name": "getSiteFromRedis",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        848,
+        384
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "redis": {
+          "id": "HKnRLpasgVqinMH4",
+          "name": "myLocalRedis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": "title"
+            },
+            {
+              "key": "description",
+              "cssSelector": "meta[name=\"description\"]",
+              "returnValue": "attribute",
+              "attribute": "content"
+            },
+            {
+              "key": "images",
+              "cssSelector": "img",
+              "returnValue": "attribute",
+              "returnArray": true
+            },
+            {
+              "key": "iframe",
+              "cssSelector": "iframe",
+              "returnValue": "attribute",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        1280,
+        32
+      ],
+      "id": "a4e28970-a3d7-4dc9-9cf7-f69047401f79",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "851cc0f5-3416-4f26-8b0b-262659cbb0fd",
+              "name": "title_description",
+              "value": "=TAGS:\n\nTitle Tag: {{ $json.title }}\nTitle length: {{ $json.title.length }}\nMeta Descrtiption: {{ $json.description }}\nMeta Descrtiption length: {{ $json.description.length }}\n\nIMAGES ON SITE:\n[\n{{ $json.images.map(img => JSON.stringify(img)).join('\\n') }}\n]\n\nIFRAMES ON SITE:\n{{ $json.iframe.toJsonString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1488,
+        32
+      ],
+      "id": "74e0bc43-ec92-426a-a667-7eb00cd41a19",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1648,
+        128
+      ],
+      "id": "0344acaa-4cca-4906-bc00-2cf6253f793b",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $json.cacheKey }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        512,
+        -160
+      ],
+      "id": "7f7c766d-705c-4c37-9a11-6af83fd6a7f3",
+      "name": "checkRedis1",
+      "credentials": {
+        "redis": {
+          "id": "HKnRLpasgVqinMH4",
+          "name": "myLocalRedis"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "kamiennewnetrza.pl"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Convert HTML to Markdown": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Set domain (text)": {
+      "main": [
+        [
+          {
+            "node": "Add protocool to domain (text)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add protocool to domain (text)": {
+      "main": [
+        [
+          {
+            "node": "checkRedis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get website (text)": {
+      "main": [
+        [
+          {
+            "node": "saveToRedis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "spider.cloud": {
+      "main": [
+        []
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Set domain (text)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "checkRedis": {
+      "main": [
+        [
+          {
+            "node": "ifRedisEmpty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ifRedisEmpty": {
+      "main": [
+        [
+          {
+            "node": "Get website (text)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "getSiteFromRedis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "saveToRedis": {
+      "main": [
+        [
+          {
+            "node": "Convert HTML to Markdown",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getSiteFromRedis": {
+      "main": [
+        [
+          {
+            "node": "Convert HTML to Markdown",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Set response (text)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "WjE4z6jOteKLEBf3"
+  },
+  "versionId": "39eab56f-0686-442b-a028-e8212445b6f6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8794a4f970040d09c64040698c632aefaa9a59e97e60424e4b5671338351753"
+  },
+  "id": "Ln7kOpsx2ZzYh0Te",
+  "tags": []
+}

@@ -1,0 +1,251 @@
+{
+  "name": "Google Ads RSA Creator",
+  "nodes": [
+    {
+      "parameters": {
+        "availableInChat": true,
+        "agentName": "Google Ads Generator",
+        "agentDescription": "Generate Google Ads Creations",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -864,
+        -48
+      ],
+      "id": "bcc94d0b-52f1-4db2-853c-15bc6a5bb969",
+      "name": "When chat message received",
+      "webhookId": "c730d7f6-0575-41c5-98f5-b7cf03429d41"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -592,
+        320
+      ],
+      "id": "03d9a069-b605-46c5-a7e7-a00f63b3ffe3",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "This tool gets website content in markdown. Put URL in query.",
+        "workflowId": {
+          "__rl": true,
+          "value": "Ln7kOpsx2ZzYh0Te",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Ln7kOpsx2ZzYh0Te",
+          "cachedResultName": "_tool web scraper"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('query', `URL of website. `, 'string') }}"
+          },
+          "matchingColumns": [
+            "query"
+          ],
+          "schema": [
+            {
+              "id": "query",
+              "displayName": "query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -176,
+        240
+      ],
+      "id": "c01e7ff4-0de1-448e-bbe6-8c49c158af15",
+      "name": "scrape_website"
+    },
+    {
+      "parameters": {
+        "description": "Validates Google Ads against character limits and count requirements.\n * Input: JSON with headlines (3-15, max 30 chars), descriptions (2-4, max 90 chars), paths (exactly 2, max 15 chars).\n * Returns validation results with specific errors to fix.\n\n",
+        "jsCode": "/**\n * n8n Code Tool: validate_google_ads\n *\n * Description:\n * Validates Google Ads against character limits and count requirements.\n * Input: ads object with headlines, descriptions, and paths arrays.\n * Returns validation results with specific errors to fix.\n */\n\n// When using schema, query is already an object\nconst ads = query.ads || query;\n\n// Limits\nconst limits = { headline: 30, description: 90, path: 15 };\nconst countReq = {\n  headlines: { min: 3, max: 15 },\n  descriptions: { min: 2, max: 4 },\n  paths: { min: 2, max: 2 }\n};\n\nconst errors = [];\nconst issues = [];\n\n// Validate headlines\nconst headlines = ads.headlines || [];\nif (headlines.length < countReq.headlines.min) {\n  errors.push(`Headlines: minimum ${countReq.headlines.min} required, got ${headlines.length}`);\n} else if (headlines.length > countReq.headlines.max) {\n  errors.push(`Headlines: maximum ${countReq.headlines.max} allowed, got ${headlines.length}`);\n}\n\nheadlines.forEach((h, i) => {\n  const len = h.length;\n  if (len > limits.headline) {\n    issues.push(`Headline ${i + 1}: \"${h}\" - ${len}/${limits.headline} chars (TOO LONG by ${len - limits.headline})`);\n  }\n});\n\n// Validate descriptions\nconst descriptions = ads.descriptions || [];\nif (descriptions.length < countReq.descriptions.min) {\n  errors.push(`Descriptions: minimum ${countReq.descriptions.min} required, got ${descriptions.length}`);\n} else if (descriptions.length > countReq.descriptions.max) {\n  errors.push(`Descriptions: maximum ${countReq.descriptions.max} allowed, got ${descriptions.length}`);\n}\n\ndescriptions.forEach((d, i) => {\n  const len = d.length;\n  if (len > limits.description) {\n    issues.push(`Description ${i + 1}: \"${d.substring(0, 30)}...\" - ${len}/${limits.description} chars (TOO LONG by ${len - limits.description})`);\n  }\n});\n\n// Validate paths\nconst paths = ads.paths || [];\nif (paths.length !== countReq.paths.min) {\n  errors.push(`Paths: exactly ${countReq.paths.min} required, got ${paths.length}`);\n}\n\npaths.forEach((p, i) => {\n  const len = p.length;\n  if (len > limits.path) {\n    issues.push(`Path ${i + 1}: \"${p}\" - ${len}/${limits.path} chars (TOO LONG by ${len - limits.path})`);\n  }\n});\n\n// Build result\nconst allValid = errors.length === 0 && issues.length === 0;\n\nlet result = allValid\n  ? \"VALID: All ads pass validation!\\n\\n\"\n  : \"INVALID: Fix the following issues:\\n\\n\";\n\nif (errors.length > 0) {\n  result += \"COUNT ERRORS:\\n\" + errors.map(e => \"- \" + e).join(\"\\n\") + \"\\n\\n\";\n}\n\nif (issues.length > 0) {\n  result += \"LENGTH ISSUES:\\n\" + issues.map(i => \"- \" + i).join(\"\\n\") + \"\\n\\n\";\n}\n\nresult += `SUMMARY:\\n- Headlines: ${headlines.length} (valid: ${headlines.filter(h => h.length <= limits.headline).length})\\n`;\nresult += `- Descriptions: ${descriptions.length} (valid: ${descriptions.filter(d => d.length <= limits.description).length})\\n`;\nresult += `- Paths: ${paths.length} (valid: ${paths.filter(p => p.length <= limits.path).length})`;\n\nreturn result;\n",
+        "specifyInputSchema": true,
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"ads\": {\n      \"type\": \"object\",\n      \"description\": \"Google Ads data object\",\n      \"properties\": {\n        \"headlines\": {\n          \"type\": \"array\",\n          \"items\": { \"type\": \"string\" },\n          \"description\": \"Array of 3-15 headlines (max 30 chars each)\"\n        },\n        \"descriptions\": {\n          \"type\": \"array\",\n          \"items\": { \"type\": \"string\" },\n          \"description\": \"Array of 2-4 descriptions (max 90 chars each)\"\n        },\n        \"paths\": {\n          \"type\": \"array\",\n          \"items\": { \"type\": \"string\" },\n          \"description\": \"Array of exactly 2 URL paths (max 15 chars each)\"\n        }\n      },\n      \"required\": [\"headlines\", \"descriptions\", \"paths\"]\n    }\n  },\n  \"required\": [\"ads\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        112,
+        208
+      ],
+      "id": "c2d8f0d5-a2e0-44dd-b677-55a60a4da1db",
+      "name": "validate_google_ads"
+    },
+    {
+      "parameters": {
+        "description": "Checks text length against a limit. Input: text (required), limit (optional, default 30). Use 30 for headlines, 90 for descriptions, 15 for paths.",
+        "jsCode": "/**\n * n8n Code Tool: check_text_length\n *\n * Description:\n * Checks text length against a specified limit. Use before adding text to ads.\n * Input: text (required), limit (optional, default 30).\n */\n\n// When using schema, query is already an object (not string)\nconst text = query.text || \"\";\nconst limit = query.limit || 30;\n\nconst length = text.length;\nconst valid = length <= limit;\nconst remaining = limit - length;\n\nconst status = valid\n  ? `OK (${remaining} chars remaining)`\n  : `TOO LONG by ${Math.abs(remaining)} chars`;\n\nreturn `Text: \"${text}\"\\nLength: ${length}/${limit}\\nValid: ${valid}\\nStatus: ${status}`;\n",
+        "specifyInputSchema": true,
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"text\": {\n      \"type\": \"string\",\n      \"description\": \"Text to check length\"\n    },\n    \"limit\": {\n      \"type\": \"integer\",\n      \"description\": \"Character limit: 30 for headlines, 90 for descriptions, 15 for paths\"\n    }\n  },\n  \"required\": [\"text\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        272,
+        208
+      ],
+      "id": "c97e5e86-0247-477f-b0e3-553ea913388f",
+      "name": "check_text_length"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=## Role\nYou are an expert in creating Google Ads RSA (Responsive Search Ads). You generate complete, compliant ad sets based on website content analysis.\n\n## Character Limits (CRITICAL)\n\n| Element | Limit | Count |\n|---------|-------|-------|\n| Headline | 30 characters | 3-15 items |\n| Description | 90 characters | 2-4 items |\n| URL Path | 15 characters | exactly 2 |\n\n## User Interaction (IMPORTANT)\n\nBefore generating ads, you MUST gather all required information. Ask the user if any of these are missing:\n\n### Required Information\n1. **URL** - website to analyze\n2. **Main Keyword** - primary keyword for Headline 1 (critical for SEO/Quality Score)\n\n### Optional but Recommended\n3. **Target Audience** - who should the ad reach?\n4. **Special Offers** - any promotions, discounts, or unique selling points to highlight?\n5. **Preferred Language** - if different from website language\n6. **Location Focus** - for local businesses\n\n### Interaction Examples\n\n**Missing keyword:**\n> \"I have the URL, but what's the main keyword you want to target? This will be used in Headline 1 and affects your Quality Score. Examples: 'Web Design', 'Plumber Warsaw', 'Organic Coffee'\"\n\n**Missing URL:**\n> \"Please provide the website URL I should analyze for the ads.\"\n\n**Ambiguous product/service:**\n> \"The website offers multiple services. Which one should be the focus of this ad campaign?\n> 1. [Service A]\n> 2. [Service B]\n> 3. All services (general campaign)\"\n\n**No clear USP found:**\n> \"I couldn't identify a unique selling point from the website. What makes this offer stand out? (e.g., free shipping, 24h support, lowest prices, years of experience)\"\n\n## Workflow\n0. **Ask for missing** - ask for missing required fields (URL, keyword)\n1. **Acknowledge start** - write brief message like \"Starting ad generation...\" or \"Analyzing website...\" before using tools\n2. **Fetch website** using `scrape_website` tool when user provides URL\n3. **Gather information** \n4. **Analyze content**: identify product/service, USP, benefits, target audience\n5. **Clarify if needed** - ask about ambiguous content, target audience, or special offers\n6. **Generate ads** following the structure below\n7. **Validate** using `validate_google_ads` tool BEFORE presenting results\n8. **If validation fails**:\n   - Fix the problematic texts\n   - Use `check_text_length` ONLY for fixed texts (not all texts)\n   - Re-validate after fixes\n9. **Present final report** - after validation passes, display the FULL text report (see Output Format section) - never skip this step!\n\n### Validation Loop\n\n```\nvalidate_google_ads → FAIL → fix texts → check_text_length (only fixed ones) → validate_google_ads\n```\n\n**When to use `check_text_length`:**\n- ✅ After fixing a text that exceeded the limit\n- ✅ When a text is close to limit (27-30 chars for headlines, 85-90 for descriptions)\n- ❌ NOT for every text before first validation\n- ❌ NOT for obviously short texts (e.g., \"Shop Now\" clearly fits 30 chars)\n\n### Autonomous Fixing (SILENT MODE)\n\nUse \"think\" tool\n\nWhen validation fails:\n- **DO NOT** write messages like \"I will fix...\", \"Let me correct...\", \"Here are my changes...\"\n- **DO NOT** explain what you're fixing or why\n- **DO NOT** show proposals or ask for approval\n- **DO NOT** communicate with user AT ALL during fixing\n- **JUST FIX SILENTLY** → validate again → repeat until pass → show ONLY final report\n- User should see NOTHING between first validation and final report\n\n## Copywriting Frameworks\n\nUse these proven formulas to create compelling, high-converting ads.\n\n### 4U Framework (for Headlines)\nEach headline should score high on at least 2 of these:\n- **Useful** - What's the benefit? What problem does it solve?\n- **Urgent** - Why act now? Time-sensitive element\n- **Unique** - What makes this different from competitors?\n- **Ultra-specific** - Concrete numbers, facts, details (not vague claims)\n\n### PAS Formula (for Descriptions)\nStructure your descriptions to:\n1. **Problem** - Identify the customer's pain point\n2. **Agitate** - Amplify the problem, show consequences\n3. **Solve** - Present your product/service as the solution\n\n### BAB Formula (alternative for Descriptions)\n1. **Before** - Current frustrating situation\n2. **After** - Desired outcome/transformation\n3. **Bridge** - How your product gets them there\n\n### FAB Transformation (for content analysis)\nAlways convert features to benefits:\n- **Feature** → **Advantage** → **Benefit**\n- Example: \"24h delivery\" → \"Get it fast\" → \"Have it tomorrow, no waiting\"\n- Apply the \"So what?\" test: keep asking until you reach emotional benefit\n\n## Psychological Triggers\n\nIncorporate these persuasion elements:\n\n| Trigger | Example |\n|---------|---------|\n| **Social Proof** | \"Trusted by 10,000+\" |\n| **Scarcity** | \"Limited Availability\" |\n| **Authority** | \"15 Years of Experience\" |\n| **Loss Aversion** | \"Don't Miss Out\" |\n| **Specificity** | \"Save 27%\" |\n\n**Rule**: Specific numbers always beat vague claims (\"347 reviews\" > \"many reviews\")\n\n## Power Words\n\nUse these high-impact words (choose based on website language):\n\nFree, New, Proven, Guaranteed, Instant, Easy, Save, Discover, Exclusive, Professional, Simple, Effective, Ultimate, Today\n\n## Ad Structure\n\n### Headlines (15 items) - Apply 4U Framework\n\n**IMPORTANT: Use Title Case for ALL headlines!**\nEvery Word Starts With Capital Letter (except short prepositions: a, the, in, on, for, to, etc.)\n\n- ✅ \"Free Shipping Over $99\"\n- ❌ \"Free shipping over $99\"\n- ✅ \"Check Our Special Offer\"\n- ❌ \"Check our special offer\"\n- ✅ \"15 Years of Experience\"\n- ❌ \"15 years of experience\"\n\n| # | Purpose | Formula Focus | Example Pattern |\n|---|---------|---------------|-----------------|\n| 1 | **Main Keyword** | Ultra-specific | Exact keyword from user |\n| 2-3 | **USP + Benefit** | Useful + Unique | \"Darmowa Dostawa Od 99zł\" |\n| 4-6 | **Benefits (FAB)** | Useful | Transform features → benefits |\n| 7-9 | **Social Proof** | Ultra-specific | Numbers: \"500+ Opinii\", \"15 Lat\" |\n| 10-12 | **CTA + Urgency** | Urgent | \"Sprawdź Teraz\", \"Ostatnia Szansa\" |\n| 13-15 | **Variants** | Unique | Synonyms, questions, alternatives |\n\n### Descriptions (4 items) - Apply PAS/BAB\n| # | Formula | Structure |\n|---|---------|-----------|\n| 1 | **PAS** | Problem → Agitate → Solve + CTA |\n| 2 | **Social Proof** | Authority + Guarantees + Trust signals |\n| 3 | **BAB** | Before → After → Bridge + Urgency |\n| 4 | **Benefits** | Alternative angle + Different CTA |\n\n### URL Paths (2 items - lower case)\n- Path 1: category/industry (e.g., \"services\")\n- Path 2: product/action (e.g., \"sycena\", \"Shop\")\n\n## Language Rules\n- **Default**: Match the language of the website being analyzed\n- **Override**: If user explicitly requests a specific language, use that language\n- Never mix languages within a single ad set\n\n## FORBIDDEN (Google Ads Policy)\n\n### Formatting\n- ALL CAPS (except acronyms: USA, B2B, CEO)\n- Repeated punctuation: !!! ... >>> ---\n- Exclamation marks in headlines (max 1 in description)\n- Emojis: :-) 😊 ♥ ★\n- Spaced out words: S U P E R\n\n### Content\n- Contact information (phone numbers, emails, addresses)\n- The word \"click\" in any form\n- Unsubstantiated superlatives (\"best\", \"#1\" without proof)\n- Spelling or grammar errors\n\n## Allowed CTAs\n- Check our offer / See offer\n- Learn more / Find out more\n- Order online / Shop now\n- Book appointment / Schedule now\n- View catalog / Browse collection\n- Contact us / Get in touch\n- Sign up today / Register now\n- Get your discount / Claim offer\n\n## CTR Optimization Techniques\n\n### Headlines:\n- Main keyword (always in Headline 1)\n- Numbers and specifics: \"25% Off\", \"24h Delivery\", \"500+ Reviews\"\n- USP - what makes the offer unique\n- Questions: \"Looking for Quality Service?\"\n- Title Case Formatting\n- Location (for local businesses)\n\n### Descriptions:\n- Expanded benefits with details\n- Social proof: \"Trusted by 10,000+ customers\"\n- Guarantees: \"30-day money back\", \"Free returns\"\n- Urgency: \"Limited time offer\", \"While stocks last\"\n- Strong CTA at the end\n\n## Output Format\n\n### Step 1: Validation (JSON format for validate_google_ads tool)\n\n**CRITICAL**: The tool requires a specific nested structure. Follow EXACTLY:\n\n✅ **CORRECT** - all data inside `ads` object:\n```json\n{\n  \"ads\": {\n    \"headlines\": [\"Headline 1\", \"Headline 2\", \"Headline 3\", ...],\n    \"descriptions\": [\"Description 1\", \"Description 2\", ...],\n    \"paths\": [\"path1\", \"path2\"]\n  }\n}\n```\n\n❌ **WRONG** - missing `ads` wrapper or incomplete fields:\n```json\n{\n  \"headlines\": [...]\n}\n```\n\n❌ **WRONG** - missing required fields:\n```json\n{\n  \"ads\": {\n    \"headlines\": [...]\n  }\n}\n```\n\n**Required structure:**\n- Root object MUST contain `ads` key\n- `ads` object MUST contain ALL THREE arrays:\n  - `headlines`: 3-15 strings (max 30 chars each)\n  - `descriptions`: 2-4 strings (max 90 chars each)\n  - `paths`: exactly 2 strings (max 15 chars each)\n\n### Step 2: Final Report (after validation passes)\n\nAfter successful validation, present the report using markdown code blocks for easy copying:\n\n===\nGOOGLE ADS - [Campaign Name]\n===\nURL: [website URL]\nKeyword: [main keyword]\n\n---\nHEADLINES\n---\n```\n[Headline 1]\n[Headline 2]\n[Headline 3]\n[Headline 4]\n[Headline 5]\n[Headline 6]\n[Headline 7]\n[Headline 8]\n[Headline 9]\n[Headline 10]\n[Headline 11]\n[Headline 12]\n[Headline 13]\n[Headline 14]\n[Headline 15]\n```\n\n---\nDESCRIPTIONS\n---\n```\n[Description 1]\n[Description 2]\n[Description 3]\n[Description 4]\n```\n\n---\nURL PATHS\n---\n```\n[path1]\n[path2]\n```\n\n**CRITICAL**:\n- Use JSON format when calling validate_google_ads tool\n- Use markdown code blocks (```) in final report so user can easily copy\n- Display the FULL report after validation passes - never skip this step\n\n## Key Rules\n\n1. **Interact First**: Never assume - ask for missing critical information\n2. **Accuracy**: Character counting must be precise - use `check_text_length` only when fixing or near limits\n3. **Diversity**: Never repeat the same phrases across headlines\n4. **Independence**: Each element must work standalone (Google rotates elements)\n5. **Compliance**: Follow all Google Ads policies strictly\n6. **Validation**: ALWAYS validate before presenting final results\n7. **Iteration**: If validation fails, fix issues and validate again until all pass\n8. **Full Report**: ALWAYS show the complete text report at the end - user needs it to copy into Google Ads\n\n## Tools Available\n\n- `scrape_website`: Fetch and analyze website content\n- `validate_google_ads`: Validate ads against Google requirements\n- `check_text_length`: Character count check - use ONLY when fixing failed texts or uncertain about length\n- `think`: Internal reasoning tool - use for complex decisions (e.g., choosing USP, analyzing content). Does not produce output to user.",
+          "enableStreaming": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -304,
+        -48
+      ],
+      "id": "fae87d7d-8b26-442c-8ddf-9785b033117b",
+      "name": "RSA AGENT"
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -768,
+        128
+      ],
+      "id": "690c8c28-b6c2-4016-8c6e-b368084a50fa",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "cxxykvBVJ4BwAWb8",
+          "name": "openrouter nimblio"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        -400,
+        320
+      ],
+      "id": "23fae88b-9baa-4b72-a9d5-4461727615d0",
+      "name": "think"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "RSA AGENT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "RSA AGENT",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "scrape_website": {
+      "ai_tool": [
+        [
+          {
+            "node": "RSA AGENT",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "validate_google_ads": {
+      "ai_tool": [
+        [
+          {
+            "node": "RSA AGENT",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check_text_length": {
+      "ai_tool": [
+        [
+          {
+            "node": "RSA AGENT",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "RSA AGENT",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "think": {
+      "ai_tool": [
+        [
+          {
+            "node": "RSA AGENT",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "0a0c1cba-2fac-40c4-82e7-d4aa6f3cb9e2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8794a4f970040d09c64040698c632aefaa9a59e97e60424e4b5671338351753"
+  },
+  "id": "NNGv3LQTHKZ1ioZg",
+  "tags": []
+}

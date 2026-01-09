@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "ads": {
+      "type": "object",
+      "description": "Google Ads data object",
+      "properties": {
+        "headlines": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Array of 3-15 headlines (max 30 chars each)"
+        },
+        "descriptions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Array of 2-4 descriptions (max 90 chars each)"
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Array of exactly 2 URL paths (max 15 chars each)"
+        }
+      },
+      "required": ["headlines", "descriptions", "paths"]
+    }
+  },
+  "required": ["ads"]
+}
