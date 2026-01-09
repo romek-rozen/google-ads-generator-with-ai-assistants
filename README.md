@@ -11,6 +11,12 @@ This repository contains Python scripts for automatic generation and validation 
 │   ├── generate_ads_txt.py     # Text file generator
 │   ├── fetch_website.py        # Website content fetcher (local crawl4ai)
 │   └── check_length.py         # Text length checker
+├── n8n-agent/              # AI Agent for n8n workflow
+│   ├── system-prompt-interactive.md  # System prompt with copywriting frameworks
+│   ├── n8n-agent-plan.md   # Architecture documentation
+│   ├── validate_google_ads.js  # Validation tool (JS)
+│   ├── check_text_length.js    # Length checker tool (JS)
+│   └── n8n-workflows/      # Exportable workflow JSON
 ├── tmp/                    # Temporary files (script inputs)
 │   ├── ads.json           # Ad input data
 │   ├── *_validated.json   # Validation results
