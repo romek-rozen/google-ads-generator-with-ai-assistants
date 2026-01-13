@@ -337,11 +337,14 @@ The `n8n-agent/` directory contains an automated AI agent workflow for n8n that 
 ### Files
 ```
 n8n-agent/
-├── system-prompt-interactive.md  # Full system prompt with copywriting frameworks
-├── n8n-agent-plan.md             # Architecture and implementation plan
-├── validate_google_ads.js        # Validation tool code
-├── check_text_length.js          # Length checker tool code
-└── n8n-workflows/                # Exportable n8n workflow JSON
+├── rsa-system-prompt-interactive.md  # Full system prompt with copywriting frameworks
+├── rsa-system-prompt.md              # Simplified system prompt
+├── n8n-agent-plan.md                 # Architecture and implementation plan
+├── validate_google_ads.js            # Validation tool code
+├── check_text_length.js              # Length checker tool code
+└── n8n-workflows/
+    ├── google-ads-rsa-creation-agent.json  # Main RSA agent workflow
+    └── _tool web scraper.json              # Web scraper sub-workflow
 ```
 
 ### Tools Available to Agent
