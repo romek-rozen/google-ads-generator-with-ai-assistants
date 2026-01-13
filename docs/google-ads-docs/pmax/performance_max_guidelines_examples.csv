@@ -1,0 +1,26 @@
+﻿Typ zasobu,Kategoria przekazu,Przykład (30 znaków dla nagłówków),Liczba znaków,Wskazówki
+Nagłówek standardowy,Nazwa produktu/usługi,Buty Sportowe Premium,23,Zawieraj nazwę produktu/usługi w kilku nagłówkach
+Nagłówek standardowy,Korzyść #1,Komfort Przez Cały Dzień,24,"Skup się na korzyściach, nie funkcjach"
+Nagłówek standardowy,Korzyść #2,Zwiększ Swoją Wydajność,27,Komunikuj konkretne rezultaty
+Nagłówek standardowy,CTA krótkie,Kup Teraz,8,Minimum 1 nagłówek ≤15 znaków dla mobile
+Nagłówek standardowy,Oferta cenowa,Od 199 zł – Darmowa Dostawa,28,Wskaż konkretną ofertę cenową
+Nagłówek standardowy,USP #1,100% Materiały Ekologiczne,28,Podkreśl unikalne cechy marki
+Nagłówek standardowy,USP #2,Technologia AntyPoślizgowa,28,Użyj mierzalnych danych gdy możliwe
+Nagłówek standardowy,Social proof,Zaufało Nam 50 000+ Klientów,30,Buduj zaufanie przez liczby
+Nagłówek standardowy,Pilność/Dostępność,Tylko Dziś -30% Rabatu,22,Twórz poczucie pilności
+Nagłówek standardowy,Problem klienta,Męczą Cię Bóle Stóp?,21,Zacznij od bólu klienta
+Nagłówek standardowy,Rozwiązanie,Znajdź Ulgę W 7 Dni,18,Zaproponuj jasne rozwiązanie
+Nagłówek standardowy,Funkcja produktu,20 Kolorów Do Wyboru,22,Podkreśl różnorodność/wybór
+Nagłówek standardowy,Gwarancja/Pewność,365 Dni Zwrotu – Bez Pytań,28,Usuń obawy przed zakupem
+Nagłówek standardowy,CTA akcyjne,Zamów Przed 15:00,16,Używaj czasowników działania
+Nagłówek standardowy,Lokalizacja/Dostawa,Dostawa W 24h W Polsce,23,Komunikuj szybkość dostawy
+Długi nagłówek,Produkt + Główna korzyść,Buty Sportowe Premium – Komfort Przez Cały Dzień I Maksymalna Wydajność,80,Połącz produkt z główną korzyścią
+Długi nagłówek,Oferta + USP + CTA,Tylko Dziś -30% + Darmowa Dostawa + 365 Dni Zwrotu. Kup Teraz!,77,Skumuluj ofertę + USP + akcję
+Długi nagłówek,Problem + Rozwiązanie,Męczą Cię Bóle Stóp? Nasze Buty Zapewniają Ulgę W 7 Dni Lub Zwrot Pieniędzy,86,Struktura: Problem → Rozwiązanie → Gwarancja
+Długi nagłówek,Social proof + Korzyść,Zaufało Nam 50 000+ Klientów. Najwyżej Oceniane Buty W Polsce – Sprawdź Sam!,85,Połącz społeczny dowód z korzyścią
+Długi nagłówek,Funkcje + Dostawa,Technologia AntyPoślizgowa + 20 Kolorów + Dostawa W 24h – Zamów Dziś,79,Techniczność + praktyczność
+Opis,Korzyść + Szczegóły + CTA,"Odkryj buty, które łączą styl z komfortem. 100% ekologiczne materiały. Darmowa dostawa od 199 zł.",95,Struktura: Korzyść + dowód + działanie
+Opis,USP + Social proof + Działanie,Ponad 50 000 zadowolonych klientów! Najwyżej oceniane buty sportowe w Polsce. Kup teraz.,98,Social proof + unikalność + CTA
+Opis,Oferta + Gwarancja + Pilność,Tylko dziś -30% rabatu! Zamów przed 15:00 i odbierz jutro. 365 dni zwrotu bez pytań.,93,Oferta + redukcja ryzyka + pilność
+Opis,Rozwiązanie problemu + Wynik,Bóle stóp? Nasze buty zapewniają ulgę w 7 dni dzięki technologii ergonomicznej. Rezultat gwarantowany.,98,Od problemu do pożądanego wyniku
+Opis,Funkcje + Dostępność + CTA,Wybierz spośród 20 kolorów. Dostawa w 24h w całej Polsce. Bezpieczne zakupy online.,87,Cechy + dostępność + akcja

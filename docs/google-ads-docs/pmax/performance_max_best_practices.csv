@@ -1,0 +1,39 @@
+﻿Zasada,Opis,Dlaczego to ważne
+1. MAKSYMALIZUJ LICZBĘ ZASOBÓW,Dodaj maksymalnie 15 nagłówków standardowych,Więcej opcji = więcej kombinacji do testowania przez AI Google
+1. MAKSYMALIZUJ LICZBĘ ZASOBÓW,Dodaj maksymalnie 5 długich nagłówków (zalecane minimum 2),Google zaleca 11+ nagłówków dla optymalnej wydajności
+1. MAKSYMALIZUJ LICZBĘ ZASOBÓW,Dodaj maksymalnie 5 opisów (zalecane minimum 4),4+ opisy dają AI więcej kontekstu i możliwości kombinacji
+2. ZAPEWNIJ RÓŻNORODNOŚĆ,Każdy zasób tekstowy powinien reprezentować inny kąt przekazu,AI Google automatycznie testuje różne kombinacje
+2. ZAPEWNIJ RÓŻNORODNOŚĆ,Unikaj powtarzania tej samej wiadomości w różnych słowach,Powtórzenia obniżają Ad Strength i ograniczają możliwości testowania
+2. ZAPEWNIJ RÓŻNORODNOŚĆ,"Testuj różne propozycje wartości: cena, jakość, szybkość, innowacja",Różne użytkownicy reagują na różne wartości
+2. ZAPEWNIJ RÓŻNORODNOŚĆ,"Mieszaj style: emocjonalny, racjonalny, pilny, informacyjny",Zwiększa szanse na trafienie w motywację konkretnego użytkownika
+3. DOPASUJ DO SŁÓW KLUCZOWYCH,Uwzględnij słowa kluczowe z najwyższym ruchem w grupie reklam,Poprawia trafność reklamy = wyższy CTR i Quality Score
+3. DOPASUJ DO SŁÓW KLUCZOWYCH,Zwiększ trafność dla użytkowników i popraw Quality Score,Google częściej wyświetli Twoją reklamę przy dopasowanych zapytaniach
+3. DOPASUJ DO SŁÓW KLUCZOWYCH,Dopasuj język do intencji wyszukiwania użytkownika,Lepsze dopasowanie = wyższa konwersja
+4. PRIORYTETYZUJ KORZYŚCI NAD FUNKCJAMI,"Skup się na tym, co użytkownik zyskuje, nie na tym co produkt ma",Korzyści rezonują emocjonalnie z użytkownikami
+4. PRIORYTETYZUJ KORZYŚCI NAD FUNKCJAMI,"Zamiast ""10 kolorów"" użyj ""Znajdź idealny kolor dla siebie""","Ludzie kupują rezultaty, nie specyfikacje techniczne"
+4. PRIORYTETYZUJ KORZYŚCI NAD FUNKCJAMI,"Odpowiedz na pytanie: ""Co mam z tego?""",Zwiększa zaangażowanie i współczynnik klikalności
+5. UŻYJ WARTOŚCI DYNAMICZNYCH,"Dodaj personalizowane elementy jak ceny początkowe ""Od X zł""","Sprawia, że reklamy są bardziej relevantne dla każdego użytkownika"
+5. UŻYJ WARTOŚCI DYNAMICZNYCH,"Użyj liczby dostępnych jednostek dla pilności ""Tylko 5 sztuk""",Tworzy pilność i zwiększa konwersje
+5. UŻYJ WARTOŚCI DYNAMICZNYCH,Uwaga: DKI (Dynamic Keyword Insertion) NIE działa w Performance Max,Performance Max używa innych mechanizmów personalizacji
+6. WPLEĆ MOCNE CTA,"Używaj czasowników akcji: Kup, Zamów, Odkryj, Wypróbuj, Sprawdź",CTA kieruje użytkownika do konkretnej akcji
+6. WPLEĆ MOCNE CTA,"Zamiast ""Dostępne produkty"" użyj ""Kup teraz i oszczędź""",Zwiększa współczynnik klikalności i konwersji
+6. WPLEĆ MOCNE CTA,Minimum jedno silne CTA powinno być w każdym zestawie zasobów,"Bez jasnego CTA użytkownicy mogą nie wiedzieć, co robić dalej"
+7. DODAJ ELEMENTY PILNOŚCI,"Ograniczona czasowo oferta: ""Tylko dziś"", ""Ostatnie sztuki""",Pilność zwiększa natychmiastowe konwersje
+7. DODAJ ELEMENTY PILNOŚCI,"Stwórz FOMO (Fear Of Missing Out): ""Dołącz do 10 000 klientów""",Psychologia FOMO jest potężnym motywatorem zakupowym
+7. DODAJ ELEMENTY PILNOŚCI,Ale zawsze bądź autentyczny - nie kłam o dostępności,Fałszywa pilność niszczy zaufanie i szkodzi brandowi długoterminowo
+8. WYKORZYSTAJ LICZBY I DANE,"Używaj konkretnych liczb: ""Oszczędź 30%"", ""W 24 godziny""",Liczby są konkretne i łatwiejsze do zapamiętania
+8. WYKORZYSTAJ LICZBY I DANE,"Social proof: ""Ponad 50 000 zadowolonych klientów""",Buduje zaufanie i wiarygodność
+8. WYKORZYSTAJ LICZBY I DANE,"Kwantyfikuj rezultaty: ""Zwiększ produktywność o 50% w tydzień""",Daje użytkownikom jasne oczekiwania co do rezultatów
+9. ADRESUJ PUNKTY BÓLU,Zidentyfikuj główne obawy/problemy grupy docelowej,Empatia tworzy połączenie emocjonalne
+9. ADRESUJ PUNKTY BÓLU,"Wyraźnie pokaż, jak Twój produkt/usługa rozwiązuje ten problem",Pokazuje wartość produktu w kontekście potrzeb użytkownika
+9. ADRESUJ PUNKTY BÓLU,"Używaj pytań: ""Męczą Cię bóle stóp?"" przed pokazaniem rozwiązania",Pytania angażują użytkownika i zwiększają zainteresowanie
+10. TESTUJ I OPTYMALIZUJ,"Monitoruj wskaźnik Siły Reklamy (Ad Strength) - dąż do ""Doskonała""",Wysoka siła reklamy = lepsze wyniki i więcej konwersji
+10. TESTUJ I OPTYMALIZUJ,Regularnie przeglądaj raport wydajności zasobów,"Dane pokazują, co działa, a co nie - nie zgaduj, mierz"
+10. TESTUJ I OPTYMALIZUJ,"Wymieniaj zasoby oznaczone jako ""Niska"" wydajność po 14 dniach danych",Zasoby o niskiej wydajności marnują budżet reklamowy
+11. UNIKAJ TYPOWYCH BŁĘDÓW,NIE PINNUJ zasobów (pinowanie nie jest dostępne w Performance Max),"Pinowanie działało w RSA, ale nie ma tej opcji w PMax"
+11. UNIKAJ TYPOWYCH BŁĘDÓW,Unikaj identycznych/bardzo podobnych nagłówków - obniża Ad Strength,Google karze niską Ad Strength = mniejszy zasięg i wyższe koszty
+11. UNIKAJ TYPOWYCH BŁĘDÓW,"Nie używaj CAPS LOCK w całości (z wyjątkiem akronimów jak ""USA"")",Narusza wytyczne Google Ads i może skutkować odrzuceniem reklam
+11. UNIKAJ TYPOWYCH BŁĘDÓW,Nie twórz niezgodności między reklamą a stroną docelową,Niezgodność = frustracja użytkowników = wysoki bounce rate = strata budżetu
+12. PERSONALIZACJA,Dopasuj przekaz do segmentów odbiorców przy użyciu audience signals,Audience signals pomagają AI lepiej targetować reklamy
+12. PERSONALIZACJA,Różne grupy zasobów mogą mieć różne style komunikacji,Segmentacja pozwala na bardziej precyzyjny przekaz
+12. PERSONALIZACJA,Wykorzystaj dane demograficzne i behawioralne do personalizacji,Personalizacja = wyższa relevancja = lepsza wydajność

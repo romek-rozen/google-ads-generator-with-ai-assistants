@@ -1,14 +1,20 @@
 # Google Ads Text Ad Generator
 
-This repository contains Python scripts for automatic generation and validation of Google Ads text ads (RSA - Responsive Search Ads) with website content fetching capabilities.
+This repository contains Python scripts for automatic generation and validation of Google Ads text ads with website content fetching capabilities.
+
+**Supported campaign types:**
+- **RSA** (Responsive Search Ads) - standard text ads
+- **PMAX** (Performance Max) - AI-powered multi-channel campaigns
 
 ## File Structure
 
 ```
 /
 ├── scripts/                # Executable scripts
-│   ├── validate_google_ads.py  # Google Ads validator
-│   ├── generate_ads_txt.py     # Text file generator
+│   ├── validate_google_ads.py  # RSA validator
+│   ├── generate_ads_txt.py     # RSA text file generator
+│   ├── validate_pmax.py        # PMAX validator
+│   ├── generate_pmax_txt.py    # PMAX text file generator
 │   ├── fetch_website.py        # Website content fetcher (local crawl4ai)
 │   └── check_length.py         # Text length checker
 ├── n8n-agent/              # AI Agent for n8n workflow
@@ -18,7 +24,8 @@ This repository contains Python scripts for automatic generation and validation 
 │   ├── check_text_length.js    # Length checker tool (JS)
 │   └── n8n-workflows/      # Exportable workflow JSON
 ├── tmp/                    # Temporary files (script inputs)
-│   ├── ads.json           # Ad input data
+│   ├── ads.json           # RSA input data
+│   ├── pmax_*.json        # PMAX input data
 │   ├── *_validated.json   # Validation results
 │   └── *_corrected.json   # Suggested corrections
 ├── ads/                    # Ready text reports
@@ -28,7 +35,9 @@ This repository contains Python scripts for automatic generation and validation 
 └── venv/                   # Python virtual environment
 ```
 
-## Workflow
+## RSA Workflow
+
+### RSA (Responsive Search Ads)
 
 1.  **Prepare data**: Place an `ads.json` file with ad data in the `tmp/` directory. The file should have the following structure:
 
@@ -67,6 +76,47 @@ This repository contains Python scripts for automatic generation and validation 
     ```
     The script will read `tmp/validated_ad.json` and create a readable text file in the `ads/` directory.
 
+### PMAX (Performance Max)
+
+1.  **Prepare data**: Place a `pmax_[name].json` file with PMAX assets in the `tmp/` directory:
+
+    ```json
+    {
+      "campaign_name": "Campaign Name (optional)",
+      "product": "Product/Service (optional)",
+      "url": "https://example.com (optional)",
+      "headlines": [
+        "Headline 1 (max 30 chars)",
+        "...",
+        "Short One (≤15 chars for mobile - REQUIRED)"
+      ],
+      "long_headlines": [
+        "Long Headline 1 (max 90 chars)",
+        "..."
+      ],
+      "descriptions": [
+        "Description 1 (max 90 chars)",
+        "..."
+      ],
+      "paths": [
+        "path1",
+        "path2"
+      ],
+      "cta": "Shop now (optional)"
+    }
+    ```
+    **Required**: `headlines` (3-15, min 1 ≤15 chars), `long_headlines` (1-5), `descriptions` (3-5), `paths` (exactly 2)
+
+2.  **Validate ad**: Run the PMAX validation script.
+    ```bash
+    python3 scripts/validate_pmax.py tmp/pmax_campaign.json
+    ```
+
+3.  **Generate `.txt` report**: After successful validation.
+    ```bash
+    python3 scripts/generate_pmax_txt.py tmp/pmax_campaign_validated.json
+    ```
+
 ## Scripts and Arguments
 
 ### `scripts/validate_google_ads.py`
@@ -82,13 +132,39 @@ Validates specified JSON file or defaults to `tmp/ads.json`.
 
 ### `scripts/generate_ads_txt.py`
 
-Script generates final `.txt` file based on validated data.
+Script generates final `.txt` file based on validated RSA data.
 
 -   **Arguments**:
     -   `input_file` (optional): Path to validated `_validated.json` file. Default: `tmp/ads_validated.json`.
     -   `-o`, `--output`: Specifies output filename. Default: `ads.txt`.
     -   `-d`, `--dir`: Specifies target directory. Default: `ads`.
     -   `-y`, `--yes`: Automatically approves file generation even if validation in `.json` file was not fully successful.
+
+### `scripts/validate_pmax.py`
+
+Validates Performance Max JSON file or defaults to `tmp/pmax.json`.
+
+-   **Arguments**:
+    -   `input_file` (optional): Path to input `.json` file. Default: `tmp/pmax.json`.
+-   **Output**: Creates in the same directory as input file:
+    -   `[filename]_validated.json`: Full validation report.
+    -   `[filename]_corrected.json`: Suggested corrections (if errors occurred).
+-   **Special validations**:
+    -   Checks for at least 1 headline ≤15 characters (mobile requirement)
+    -   Validates Long Headlines (1-5 items, max 90 chars)
+    -   Validates Descriptions (3-5 items, max 90 chars)
+-   **Behavior**: Exits with code `0` on successful validation or `1` on errors.
+
+### `scripts/generate_pmax_txt.py`
+
+Script generates final `.txt` file based on validated PMAX data.
+
+-   **Arguments**:
+    -   `input_file` (optional): Path to validated `_validated.json` file. Default: `tmp/pmax_validated.json`.
+    -   `-o`, `--output`: Specifies output filename. Default: `pmax.txt`.
+    -   `-d`, `--dir`: Specifies target directory. Default: `ads`.
+    -   `-y`, `--yes`: Automatically approves file generation.
+-   **Output sections**: Headlines (with mobile indicator), Long Headlines, Descriptions, Paths, CTA
 
 ### `scripts/fetch_website.py`
 
@@ -312,11 +388,23 @@ playwright install chromium
 
 ## Google Ads Limits
 
+### RSA (Responsive Search Ads)
+
 | Element | Limit | Required Count |
 |---------|-------|----------------|
 | Headlines | 30 characters | 3-15 items |
 | Descriptions | 90 characters | 2-4 items |
 | URL Paths | 15 characters | Exactly 2 |
+
+### PMAX (Performance Max)
+
+| Element | Limit | Required Count | Notes |
+|---------|-------|----------------|-------|
+| Headlines | 30 characters | 3-15 items | **Min 1 must be ≤15 chars** |
+| Long Headlines | 90 characters | 1-5 items | Used in larger placements |
+| Descriptions | 90 characters | 3-5 items | More than RSA |
+| URL Paths | 15 characters | Exactly 2 | Same as RSA |
+| CTA | From list | 1 item | Optional |
 
 ## License
 

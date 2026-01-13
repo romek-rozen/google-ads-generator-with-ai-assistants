@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-Python-based Google Ads text ad (RSA - Responsive Search Ads) generator and validator system with automated workflows for creating compliant ads.
+Python-based Google Ads text ad generator and validator system with automated workflows for creating compliant ads.
+
+**Supported campaign types:**
+- **RSA** (Responsive Search Ads) - standard text ads
+- **PMAX** (Performance Max) - AI-powered multi-channel campaigns
 
 ## Commands
 
@@ -15,7 +19,9 @@ source venv/bin/activate
 
 ### Core Workflows
 
-**1. Validate Google Ads:**
+#### RSA (Responsive Search Ads)
+
+**1. Validate RSA:**
 ```bash
 python3 scripts/validate_google_ads.py [input_file]
 # Default: tmp/ads.json
@@ -23,13 +29,33 @@ python3 scripts/validate_google_ads.py [input_file]
 # Exit code: 0 on success, 1 on validation errors
 ```
 
-**2. Generate Text Report:**
+**2. Generate RSA Report:**
 ```bash
 python3 scripts/generate_ads_txt.py [validated_file] [-o output.txt] [-d output_dir] [-y]
 # Default input: tmp/ads_validated.json
 # Default output: ads/ads.txt
 # -y flag: bypass validation warnings and force generation
 ```
+
+#### PMAX (Performance Max)
+
+**1. Validate PMAX:**
+```bash
+python3 scripts/validate_pmax.py [input_file]
+# Default: tmp/pmax.json
+# Creates: [filename]_validated.json and [filename]_corrected.json
+# Special checks: min 1 headline ≤15 chars, long_headlines validation
+# Exit code: 0 on success, 1 on validation errors
+```
+
+**2. Generate PMAX Report:**
+```bash
+python3 scripts/generate_pmax_txt.py [validated_file] [-o output.txt] [-d output_dir] [-y]
+# Default input: tmp/pmax_validated.json
+# Default output: ads/pmax.txt
+```
+
+#### Shared Tools
 
 **3. Fetch Website Content:**
 ```bash
@@ -117,13 +143,22 @@ flowchart TD
 
 ### Key Components
 
-- **GoogleAdsValidator** (scripts/validate_google_ads.py:12): Core validation logic with strict Google Ads requirements
-- **Google Ads Limits**:
-  - Headlines: 3-15 items, max 30 characters each
-  - Descriptions: 2-4 items, max 90 characters each
-  - URL Paths: exactly 2 items, max 15 characters each
+- **GoogleAdsValidator** (scripts/validate_google_ads.py:12): RSA validation logic
+- **PMaxValidator** (scripts/validate_pmax.py:12): PMAX validation logic with mobile headline check
 
-### JSON Structure
+### RSA Limits
+- Headlines: 3-15 items, max 30 characters each
+- Descriptions: 2-4 items, max 90 characters each
+- URL Paths: exactly 2 items, max 15 characters each
+
+### PMAX Limits
+- Headlines: 3-15 items, max 30 chars, **min 1 must be ≤15 chars (mobile)**
+- Long Headlines: 1-5 items, max 90 characters each
+- Descriptions: 3-5 items, max 90 characters each
+- URL Paths: exactly 2 items, max 15 characters each
+- CTA: optional (from Google's list)
+
+### RSA JSON Structure
 ```json
 {
   "campaign_name": "optional",
@@ -132,6 +167,20 @@ flowchart TD
   "headlines": ["required array, 3-15 items"],
   "descriptions": ["required array, 2-4 items"],
   "paths": ["exactly 2 items required"]
+}
+```
+
+### PMAX JSON Structure
+```json
+{
+  "campaign_name": "optional",
+  "product": "optional",
+  "url": "optional",
+  "headlines": ["required, 3-15 items, min 1 ≤15 chars"],
+  "long_headlines": ["required, 1-5 items, max 90 chars"],
+  "descriptions": ["required, 3-5 items"],
+  "paths": ["exactly 2 items"],
+  "cta": "optional"
 }
 ```
 
@@ -168,14 +217,19 @@ playwright install chromium
 ```
 /
 ├── scripts/                # Executable scripts
-│   ├── validate_google_ads.py  # Validates ad JSON against Google Ads requirements
-│   ├── generate_ads_txt.py     # Converts validated JSON to readable .txt report
-│   ├── fetch_website.py        # Fetches website content using local crawl4ai
-│   └── check_length.py         # Simple text length checker for quick validation
+│   ├── validate_google_ads.py  # RSA validator
+│   ├── generate_ads_txt.py     # RSA report generator
+│   ├── validate_pmax.py        # PMAX validator
+│   ├── generate_pmax_txt.py    # PMAX report generator
+│   ├── fetch_website.py        # Website content fetcher
+│   └── check_length.py         # Text length checker
 ├── tmp/                    # Temporary files (script inputs)
-│   ├── ads.json           # Raw ad data input
+│   ├── ads.json           # RSA input data
+│   ├── pmax_*.json        # PMAX input data
 │   ├── *_validated.json   # Validation results
 │   └── *_corrected.json   # Auto-generated corrections
 ├── ads/                    # Final text reports output directory
+│   ├── *.txt              # RSA reports
+│   └── pmax_*.txt         # PMAX reports
 └── tasks/                  # Website fetch results (domain:keyword.json)
 ```

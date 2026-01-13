@@ -1,0 +1,33 @@
+﻿Kategoria,Element do sprawdzenia,Status
+NAGŁÓWKI (Headlines),"Liczba nagłówków (minimum 3, zalecane 11+, maksimum 15)",☐
+NAGŁÓWKI (Headlines),Limit znaków: maksymalnie 30 znaków na nagłówek,☐
+NAGŁÓWKI (Headlines),Co najmniej JEDEN nagłówek ma 15 znaków lub mniej (wymagane),☐
+NAGŁÓWKI (Headlines),Nagłówki są różnorodne i nie powtarzają się,☐
+NAGŁÓWKI (Headlines),Każdy nagłówek ma sens samodzielnie,☐
+NAGŁÓWKI (Headlines),Nagłówki zawierają słowa kluczowe związane z intencją użytkownika,☐
+DŁUGIE NAGŁÓWKI (Long Headlines),"Liczba długich nagłówków (minimum 1, zalecane 2+, maksimum 5)",☐
+DŁUGIE NAGŁÓWKI (Long Headlines),Limit znaków: maksymalnie 90 znaków na długi nagłówek,☐
+DŁUGIE NAGŁÓWKI (Long Headlines),Przynajmniej 2 długie nagłówki mają 30+ znaków (zalecane),☐
+DŁUGIE NAGŁÓWKI (Long Headlines),Długie nagłówki oferują więcej kontekstu niż standardowe nagłówki,☐
+OPISY (Descriptions),"Liczba opisów (minimum 3, zalecane 4+, maksimum 5)",☐
+OPISY (Descriptions),Limit znaków: maksymalnie 90 znaków na opis,☐
+OPISY (Descriptions),"Opisy uzupełniają nagłówki, nie powielają ich",☐
+OPISY (Descriptions),Każdy opis może funkcjonować z dowolnym nagłówkiem,☐
+OPISY (Descriptions),Opisy są skoncentrowane na działaniu i korzyściach,☐
+NAZWA FIRMY (Business Name),Nazwa firmy ma maksymalnie 25 znaków,☐
+NAZWA FIRMY (Business Name),Nazwa firmy jest spójna z marką,☐
+WEZWANIE DO DZIAŁANIA (CTA),Wybrano odpowiednie CTA z listy Google lub użyto automatycznego,☐
+WEZWANIE DO DZIAŁANIA (CTA),CTA są wplecione w treść nagłówków i opisów,☐
+ŚCIEŻKA URL (Display Path),Dodano maksymalnie 2 ścieżki URL,☐
+ŚCIEŻKA URL (Display Path),Każda ścieżka ma maksymalnie 15 znaków,☐
+OGÓLNE - JAKOŚĆ,Sprawdzono ortografię i gramatykę we wszystkich zasobach tekstowych,☐
+OGÓLNE - JAKOŚĆ,Używano prawidłowej kapitalizacji (bez CAPS LOCK w całości),☐
+OGÓLNE - JAKOŚĆ,Treści reklamowe odzwierciedlają zawartość strony docelowej,☐
+OGÓLNE - JAKOŚĆ,Unikano powtórzeń między nagłówkami i opisami,☐
+OGÓLNE - RÓŻNORODNOŚĆ,Dodano maksymalną liczbę zasobów tekstowych (15+1+5),☐
+OGÓLNE - RÓŻNORODNOŚĆ,"Uwzględniono różne kąty przekazu (produkt, korzyści, CTA, USP, oferta)",☐
+OGÓLNE - RÓŻNORODNOŚĆ,Testowano różne propozycje wartości w różnych zasobach,☐
+OPTYMALIZACJA,"Siła reklamy (Ad Strength) wynosi ""Doskonała"" lub ""Dobra""",☐
+OPTYMALIZACJA,Regularnie monitorowane są wyniki poszczególnych zasobów,☐
+OPTYMALIZACJA,Zasoby o niskiej wydajności są wymieniane na nowe,☐
+OPTYMALIZACJA,Wykorzystano raport kombinacji do identyfikacji najlepszych zestawień,☐
